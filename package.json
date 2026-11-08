@@ -4,6 +4,7 @@
   "description": "Basa Laboratory Landing Page & Website",
   "main": "server.js",
   "scripts": {
+    "build": "echo \"Build completed successfully\"",
     "start": "node server.js",
     "dev": "node server.js"
   },
