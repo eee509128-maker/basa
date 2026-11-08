@@ -1,0 +1,112 @@
+{
+  ".depstate.json": {
+    "hash": "916f5c50786a9bf49f52d19663a304537ff76b345bf46befe72f77432f59ec6f",
+    "mtime": 1791387449.9191918,
+    "size": 3594
+  },
+  "components/carousel.html": {
+    "hash": "00999f0ed1d2f073477aca3e4794af8ebc1898c9cf3c28d6afcc94caa69d33a0",
+    "mtime": 1790313199.395227,
+    "size": 6282
+  },
+  "components/contact.html": {
+    "hash": "3459168be46ab5e474a505d0e5626c79e302d2c484bfd0a2a357414b31c0cc2c",
+    "mtime": 1791386805.2469368,
+    "size": 3472
+  },
+  "components/download.html": {
+    "hash": "99f8ddd84087c75a472f4f4ad920ae516576dc3cbb1cf573c2fa3c682af16d32",
+    "mtime": 1790320396.6735659,
+    "size": 3840
+  },
+  "components/footer.html": {
+    "hash": "88e7659dac3d8dc13fc0c9b38d8c9cf4e763646a22384ce1d3536e9e2cc49dea",
+    "mtime": 1791386837.2490916,
+    "size": 3353
+  },
+  "components/hero.html": {
+    "hash": "1fc6110e7376acdb5b1d92ef1d79a0ca7734c90a90c69e631f6f52ce262419fc",
+    "mtime": 1791386431.1833587,
+    "size": 2895
+  },
+  "components/navbar.html": {
+    "hash": "1a590ef39b91f2183dab01ba24435557e3909114ee4a56252034edbc11022363",
+    "mtime": 1791386385.71506,
+    "size": 1158
+  },
+  "components/pricing.html": {
+    "hash": "f20ae5c307d37dcec36854d953149c67f9d48691c9e01f2b595a7bccf540425a",
+    "mtime": 1790314540.0105946,
+    "size": 5792
+  },
+  "components/services.html": {
+    "hash": "c0130316ede623e87ccd3623ffe76179f79a8a06194bd87d21085613007985a1",
+    "mtime": 1791386572.289153,
+    "size": 3158
+  },
+  "components/species-services.html": {
+    "hash": "30c0ac8a4df4c6d5d30e8e2a9cd5bccc0f5a8cb30af80d29ef3af816f243263e",
+    "mtime": 1791386603.9201493,
+    "size": 7284
+  },
+  "components/testimonials.html": {
+    "hash": "735536271c9016f1d7d380a3252166307f412c7f0f6c4a3efb912712828c27fb",
+    "mtime": 1790313266.9964395,
+    "size": 9487
+  },
+  "components/why-basa.html": {
+    "hash": "eda2940661ef260f3f7034b1754f7019ef4b6c4a3c05164370a29c22d732ab71",
+    "mtime": 1791386635.401224,
+    "size": 2383
+  },
+  "contents.txt": {
+    "hash": "587ec8577c630dc5a4dbdc402e043bc55753204d68db55e0c48de5768e774907",
+    "mtime": 1791377562.6648908,
+    "size": 64067
+  },
+  "createreport.json": {
+    "hash": "c231103c0b2ce6dea83baec65ef0f1bb8bdab592d0f98cbbe3bb7f3e5a5b38f1",
+    "mtime": 1790311955.0200868,
+    "size": 635
+  },
+  "css/landing.css": {
+    "hash": "8045bcb0dd3109bfca6ab9f621c5e02c3b7cdc8f5e3976c374fe98e8c0f1dfb9",
+    "mtime": 1790312703.337872,
+    "size": 155
+  },
+  "css/partials/base.css": {
+    "hash": "0509f32ec27cc3803ac722227c13b6f79dbdf0be4c65068c9531a63038d9c2ac",
+    "mtime": 1791387077.956438,
+    "size": 3562
+  },
+  "css/partials/components.css": {
+    "hash": "287e0120fbb6781eb92393787e9c6d22e01d968a3eaac6888616566524433d72",
+    "mtime": 1791387231.3640604,
+    "size": 3082
+  },
+  "css/partials/layout.css": {
+    "hash": "bd601cc57ff2a616fb4f88614d240b36da7b44f57a677d27a61517df0f4f3fdc",
+    "mtime": 1791387286.7591927,
+    "size": 4587
+  },
+  "css/partials/sections.css": {
+    "hash": "1cbcd6c578ec0249cef3cb3f830b93eb1e9ac4c4733cf18ea27bef257434b4d6",
+    "mtime": 1791387436.8993082,
+    "size": 4619
+  },
+  "index.html": {
+    "hash": "bf4eedd4c527cee75618296b58a4794d986217ba181bc099e029368f7d1fc6ac",
+    "mtime": 1791387445.72113,
+    "size": 1941
+  },
+  "js/landing.js": {
+    "hash": "5bd41e9327b34a871716acf9eed7e89986f4fa98501afcb49739b28c930ecfb4",
+    "mtime": 1791387338.5621805,
+    "size": 2075
+  },
+  "structure.txt": {
+    "hash": "789becfaa0d26f4b0488f0edaa9504807e85745fcfb0a9954de832ed561c5174",
+    "mtime": 1791377562.6565092,
+    "size": 1214
+  }
+}
