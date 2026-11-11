@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت جامع آزمایشگاه تخصصی باسا</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <style>
+    :root {
+      --sidebar-w: 260px;
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Vazir', Tahoma, sans-serif; background: var(--bg); color: var(--text); direction: rtl; display: flex; min-height: 100vh; }
+    
+    /* Sidebar */
+    .admin-sidebar {
+      width: var(--sidebar-w);
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 100;
+      border-left: 1px solid #1e293b;
+    }
+    .sidebar-brand {
+      padding: 24px 20px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .sidebar-menu {
+      padding: 16px 10px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: #94a3b8;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .menu-item:hover, .menu-item.active {
+      background: rgba(249, 115, 22, 0.15);
+      color: #fb923c;
+    }
+    .menu-item.active {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+    }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Main Content */
+    .admin-main {
+      margin-right: var(--sidebar-w);
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .admin-title h1 {
+      font-size: 1.5rem;
+      color: var(--text);
+      font-weight: 800;
+    }
+    .admin-title p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .kpi-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .kpi-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 10px 0 4px;
+    }
+
+    /* Content Sections */
+    .tab-section {
+      display: none;
+    }
+    .tab-section.active {
+      display: block;
+    }
+
+    /* Tables */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+    .table-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #fafbfc;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+    .admin-table th {
+      background: #f1f5f9;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .admin-table td {
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .admin-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* Badges & Buttons */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-paid { background: #dcfce7; color: #15803d; }
+    .badge-unpaid { background: #fef3c7; color: #b45309; }
+    .badge-status { background: #e0f2fe; color: #0369a1; }
+    
+    .btn-admin {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-admin-primary { background: var(--primary); color: #fff; }
+    .btn-admin-primary:hover { background: var(--primary-dark); }
+    .btn-admin-danger { background: #fee2e2; color: #dc2626; }
+    .btn-admin-danger:hover { background: #fecaca; }
+    .btn-admin-secondary { background: #f1f5f9; color: #475569; }
+    .btn-admin-secondary:hover { background: #e2e8f0; }
+
+    /* Chat Widget Styles (Unified) */
+    .basa-msg-row { display: flex; flex-direction: column; max-width: 85%; margin-bottom: 10px; }
+    .basa-msg-row.bot { align-self: flex-start; }
+    .basa-msg-row.user { align-self: flex-end; }
+    .basa-msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 0.88rem; line-height: 1.65; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); }
+    .basa-msg-row.bot .basa-msg-bubble { background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; border-bottom-right-radius: 4px; }
+    .basa-msg-row.user .basa-msg-bubble { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); color: #ffffff; border-bottom-left-radius: 4px; }
+    .basa-msg-time { font-size: 0.68rem; color: #94a3b8; margin-top: 4px; }
+
+    /* Modal */
+    .admin-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none; /* Changed from flex to none */
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .admin-modal-box {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand" style="display: flex; align-items: center; gap: 12px;">
+      <img src="/assets/logo.png" alt="آزمایشگاه باسا" style="height: 46px; width: auto; object-fit: contain; background: #fff; border-radius: 50%; padding: 2px;">
+      <div>
+        <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0;">آزمایشگاه باسا</h2>
+        <span style="font-size: 0.72rem; color: #94a3b8;">پنل مدیریت جامع سیستم</span>
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <div class="menu-item active" onclick="switchAdminTab('overview')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>داشبورد و آمار</span>
+      </div>
+      <div class="menu-item" onclick="switchAdminTab('orders')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <span>مدیریت پذیرش‌ها و نمونه‌ها</span>
+      </div>
+      <div class="menu-item" onclick="switchAdminTab('payments')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        <span>تراکنش‌های درگاه پرداخت بانکی</span>
+      </div>
+      <div class="menu-item" onclick="switchAdminTab('users')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>کاربران و ثبت‌نام‌کنندگان</span>
+      </div>
+      <div class="menu-item" onclick="switchAdminTab('tests')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        <span>مدیریت تست‌ها و تعرفه‌ها</span>
+      </div>
+      <div class="menu-item" onclick="switchAdminTab('tickets')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>💬 چت و پیام‌های پشتیبانی</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div>
+        <div style="font-size: 0.85rem; font-weight: bold; color: #fff;">مدیر ارشد باسا</div>
+        <div style="font-size: 0.72rem; color: #94a3b8;">basa.ir</div>
+      </div>
+      <a href="/admin/logout.php" style="color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: bold;">خروج</a>
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div class="admin-title">
+        <h1 id="pageHeading">داشبورد و آمار تحلیلی باسا</h1>
+        <p>مسئول فنی: دکتر علی مشاوری‌نیا | سامانه تریاژ هوش مصنوعی و درگاه شاپرک</p>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <a href="/" target="_blank" class="btn-admin btn-admin-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          مشاهده وب‌سایت
+        </a>
+      </div>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="tab-overview" class="tab-section active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">مجموع درآمد پرداختی آنلاین</span>
+          <div class="kpi-value" id="kpiRevenue" style="color: #16a34a;">۰ تومان</div>
+          <span style="font-size: 0.72rem; color: #64748b;">تراکنش‌های موفق شاپرک</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">کل پذیرش‌های ثبت شده</span>
+          <div class="kpi-value" id="kpiTotalOrders">۰</div>
+          <span style="font-size: 0.72rem; color: #64748b;">نمونه‌های بالینی دامپزشکی</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">پذیرش‌های پرداخت شده</span>
+          <div class="kpi-value" id="kpiPaidOrders" style="color: #0284c7;">۰</div>
+          <span style="font-size: 0.72rem; color: #64748b;">تاییدیه مالی معتبر</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">دامپزشکان و کاربران عضو</span>
+          <div class="kpi-value" id="kpiUsers">۰</div>
+          <span style="font-size: 0.72rem; color: #64748b;">کلینیک‌ها و مراجعین ثبت شده</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">بانک تست‌های فعال آزمایشگاه</span>
+          <div class="kpi-value" id="kpiTests" style="color: #ea580c;">۴۸</div>
+          <span style="font-size: 0.72rem; color: #64748b;">هماتولوژی، بیوشیمی، PCR</span>
+        </div>
+      </div>
+
+      <!-- Quick Recent Orders in Overview -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size: 1.05rem; font-weight: 700;">آخرین پذیرش‌ها و نمونه‌های دریافتی</h3>
+          <button onclick="switchAdminTab('orders')" class="btn-admin btn-admin-primary">مشاهده همه پذیرش‌ها</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>کد پیگیری</th>
+                <th>نام مراجع / کلینیک</th>
+                <th>بیمار (گونه / نژاد)</th>
+                <th>مبلغ (تومان)</th>
+                <th>وضعیت پرداخت</th>
+                <th>مرحله آزمایشگاه</th>
+                <th>تاریخ ثبت</th>
+              </tr>
+            </thead>
+            <tbody id="overviewOrdersBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ORDERS & ADMISSIONS -->
+    <div id="tab-orders" class="tab-section">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div style="display: flex; gap: 10px; align-items: center; flex: 1; max-width: 400px;">
+            <input type="text" id="orderSearch" oninput="filterOrdersTable()" placeholder="جستجو با نام، موبایل، بیمار یا کد..." style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;">
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <select id="orderStatusFilter" onchange="filterOrdersTable()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;">
+              <option value="all">همه وضعیت‌ها</option>
+              <option value="paid">پرداخت شده</option>
+              <option value="unpaid">در انتظار پرداخت</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>کد</th>
+                <th>مراجع / کلینیک</th>
+                <th>موبایل</th>
+                <th>بیمار</th>
+                <th>مبلغ کل</th>
+                <th>وضعیت پرداخت آنلاین</th>
+                <th>مرحله آزمایش</th>
+                <th>فایل نتیجه (PDF)</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: GATEWAY PAYMENTS -->
+    <div id="tab-payments" class="tab-section">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">لاگ تراکنش‌های درگاه پرداخت اینترنتی (شاپرک)</h3>
+            <span style="font-size: 0.78rem; color: #64748b;">درگاه پرداخت الکترونیک شاپرک با تاییدیه آنلاین</span>
+          </div>
+          <button onclick="loadPayments()" class="btn-admin btn-admin-secondary">🔄 بروزرسانی تراکنش‌ها</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>شناسه تراکنش (Track ID)</th>
+                <th>کد سفارش باسا</th>
+                <th>پرداخت کننده</th>
+                <th>شماره موبایل</th>
+                <th>مبلغ (تومان)</th>
+                <th>وضعیت تراکنش</th>
+                <th>کارت بانکی / ارجاع</th>
+                <th>تاریخ و زمان</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: USERS & CLINICS -->
+    <div id="tab-users" class="tab-section">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size: 1.05rem; font-weight: 700;">لیست مشتریان و کاربران ثبت‌نام شده در سامانه</h3>
+          <span style="font-size: 0.82rem; color: #64748b;" id="usersCountBadge">۰ کاربر</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>شناسه</th>
+                <th>نام و نام خانوادگی</th>
+                <th>مرکز درمانی / کلینیک</th>
+                <th>موبایل (نام کاربری)</th>
+                <th>نقش</th>
+                <th>تاریخ عضویت</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: TESTS & TARIFFS CATALOG MANAGER -->
+    <div id="tab-tests" class="tab-section">
+      <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div>
+          <h3 style="color: #9a3412; font-size: 1.05rem; margin: 0 0 4px 0;">تنظیم نرخ مصوب تعرفه آزمایشگاه باسا</h3>
+          <p style="color: #c2410c; font-size: 0.82rem; margin: 0;">کلیه تست‌های آزمایشگاهی بر اساس تعرفه مصوب باسا تنظیم شده و قابل مدیریت و تغییر هستند.</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="number" id="markupInput" value="35" style="width: 70px; padding: 8px; border: 1px solid #fed7aa; border-radius: 8px; text-align: center; font-weight: bold;">
+          <button onclick="applyBulkMarkup()" class="btn-admin btn-admin-primary">اعمال درصد روی همه تست‌ها</button>
+          <button onclick="openAddTestModal()" class="btn-admin" style="background:#16a34a; color:#fff;">+ افزودن تست جدید</button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <input type="text" id="testSearch" oninput="filterTestsTable()" placeholder="جستجوی تست، کد یا دسته‌بندی..." style="max-width: 320px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;">
+          <span style="font-size: 0.82rem; color: #64748b;" id="testsCountBadge">۴۸ تست فعال</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>کد</th>
+                <th>نام تست</th>
+                <th>دسته‌بندی</th>
+                <th>زمان پاسخدهی</th>
+                <th>قیمت پایه (تومان)</th>
+                <th>قیمت باسا (تومان)</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="testsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: SUPPORT TICKETS & CHATS -->
+    <div id="tab-tickets" class="tab-section">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">درخواست‌های ارتباط با کارشناس و تیکت‌های چت آنلاین</h3>
+            <span style="font-size: 0.78rem; color: #64748b;">پیام‌های ارسال شده از چت باکس شناور پشتیبانی باسا</span>
+          </div>
+          <button onclick="loadTickets()" class="btn-admin btn-admin-secondary">🔄 بروزرسانی پیام‌ها</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>شناسه تیکت</th>
+                <th>نام مراجع / کلینیک</th>
+                <th>شماره همراه</th>
+                <th>متن پیام / سوال</th>
+                <th>تاریخ و زمان</th>
+                <th>وضعیت پاسخ</th>
+                <th>پاسخ ثبت شده</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="ticketsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit Order Modal -->
+  <div id="editOrderModal" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+        <h3 id="editOrderTitle" style="margin: 0; color: #1e293b;">ویرایش سفارش</h3>
+        <button onclick="closeEditOrderModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <form id="editOrderForm" onsubmit="saveOrderChanges(event)">
+        <input type="hidden" id="editOrderId">
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">نام صاحب / کلینیک</label>
+          <input type="text" id="editOrderCustomer" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">شماره همراه</label>
+          <input type="text" id="editOrderMobile" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">مبلغ کل سفارش (تومان)</label>
+          <input type="number" id="editOrderAmount" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">وضعیت پرداخت آنلاین</label>
+          <select id="editOrderStatus" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+            <option value="paid">پرداخت شده</option>
+            <option value="unpaid">در انتظار پرداخت</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">مرحله پذیرش در آزمایشگاه</label>
+          <select id="editOrderStage" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+            <option value="registered">ثبت اولیه</option>
+            <option value="sample_received">نمونه دریافت شده در آزمایشگاه</option>
+            <option value="in_progress">در حال انجام آزمایش در بخش تخصصی</option>
+            <option value="verified_by_technical_manager">تایید نهایی مسئول فنی (دکتر مشاوری‌نیا)</option>
+            <option value="completed_ready">آماده و نتیجه صادر شده</option>
+          </select>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="closeEditOrderModal()" class="btn-admin btn-admin-secondary">انصراف</button>
+          <button type="submit" class="btn-admin btn-admin-primary">ذخیره تغییرات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Upload PDF Modal -->
+  <div id="uploadPdfModal" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-box" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+        <h3 style="margin: 0;">آپلود نتیجه آزمایش (فایل PDF)</h3>
+        <button onclick="closeUploadPdfModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <form id="uploadPdfForm" onsubmit="handlePdfUpload(event)">
+        <input type="hidden" id="uploadOrderId">
+        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 15px;">با آپلود فایل نتیجه، وضعیت سفارش به "آماده و نتیجه صادر شده" تغییر می‌یابد و فایل برای بیمار و پزشک قابل دانلود خواهد بود.</p>
+        <div style="margin-bottom: 20px;">
+          <input type="file" id="pdfFileInput" accept=".pdf" required style="width: 100%; padding: 12px; border: 2px dashed #cbd5e1; border-radius: 8px;">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="closeUploadPdfModal()" class="btn-admin btn-admin-secondary">انصراف</button>
+          <button type="submit" id="btnUploadSubmit" class="btn-admin btn-admin-primary">آپلود و صدور نتیجه</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add/Edit Test Modal -->
+  <div id="testModal" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+        <h3 id="testModalTitle" style="margin: 0;">مدیریت تست آزمایشگاهی</h3>
+        <button onclick="closeTestModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <form id="testForm" onsubmit="saveTest(event)">
+        <input type="hidden" id="modalTestId">
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">نام تست (فارسی) *</label>
+          <input type="text" id="mTestName" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">کد تست</label>
+          <input type="text" id="mTestCode" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">دسته‌بندی تخصصی</label>
+          <select id="mTestCategory" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+            <option value="هماتولوژی و انعقاد">هماتولوژی و انعقاد</option>
+            <option value="بیوشیمی خون و الکترولیت‌ها">بیوشیمی خون و الکترولیت‌ها</option>
+            <option value="سرولوژی و کیت‌های تشخیصی">سرولوژی و کیت‌های تشخیصی</option>
+            <option value="مولکولی و Real-Time PCR">مولکولی و Real-Time PCR</option>
+            <option value="میکروبیولوژی، کشت و آنتی‌بیوگرام">میکروبیولوژی، کشت و آنتی‌بیوگرام</option>
+            <option value="انگل‌شناسی و اسمیر خون و پوست">انگل‌شناسی و اسمیر خون و پوست</option>
+            <option value="پاتولوژی، سیتولوژی و آنالیز مایعات">پاتولوژی، سیتولوژی و آنالیز مایعات</option>
+            <option value="هورمونی، غدد و پایش دارویی">هورمونی، غدد و پایش دارویی</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">قیمت پایه مصوب (تومان)</label>
+            <input type="number" id="mTestBasePrice" oninput="calcModalMarkupPrice()" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">قیمت خدمات باسا (تومان)</label>
+            <input type="number" id="mTestPrice" required style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+          </div>
+        </div>
+        <div style="margin-bottom: 18px;">
+          <label style="display:block; font-size:0.82rem; font-weight:bold; margin-bottom:4px;">زمان پاسخدهی</label>
+          <input type="text" id="mTestTime" value="۲۴ ساعت" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="closeTestModal()" class="btn-admin btn-admin-secondary">انصراف</button>
+          <button type="submit" class="btn-admin btn-admin-primary">ذخیره تست</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reply Ticket Modal (Modern Interactive Live Chat Window Style) -->
+  <div id="replyTicketModal" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-box" style="max-width: 540px; width: 95%; padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 620px; max-height: 88vh; border-radius: 22px;">
+      <!-- Chat Header -->
+      <div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ea580c); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(249,115,22,0.35);">👨‍⚕️</div>
+          <div>
+            <h3 id="replyModalCustomerName" style="margin: 0; font-size: 0.98rem; font-weight: 800; color: #fff;">پشتیبانی آنلاین باسا</h3>
+            <span id="replyModalCustomerMeta" style="font-size: 0.74rem; color: #38bdf8; display: block; margin-top: 2px;">گفتگو با مراجع و کلینیک</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeReplyTicketModal()" style="background: rgba(255,255,255,0.15); border: none; width: 34px; height: 34px; border-radius: 50%; color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+      </div>
+
+      <!-- Chat Messages Scroll Area -->
+      <div id="replyChatMessagesArea" style="flex: 1; background: #f8fafc; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;"></div>
+
+      <!-- Reply Quote Preview Bar in Admin Modal -->
+      <div id="adminReplyPreviewBar" style="display: none; background: #fff7ed; border-top: 1px solid #fed7aa; padding: 7px 16px; align-items: center; justify-content: space-between; gap: 8px;">
+        <div style="border-right: 3px solid #f97316; padding-right: 8px; flex: 1; min-width: 0;">
+          <div id="adminReplyPreviewSender" style="font-size: 0.72rem; font-weight: 800; color: #ea580c;">در پاسخ به پیام</div>
+          <div id="adminReplyPreviewText" style="font-size: 0.75rem; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></div>
+        </div>
+        <button type="button" onclick="clearAdminReplyTarget()" style="background: none; border: none; color: #64748b; cursor: pointer; font-size: 0.9rem;">✕</button>
+      </div>
+
+      <!-- Chat Input Area -->
+      <form id="replyTicketForm" onsubmit="saveTicketReply(event)" style="background: #ffffff; border-top: 1px solid #e2e8f0; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+        <input type="hidden" id="replyTicketId">
+        <textarea id="replyText" rows="1" placeholder="پاسخ خود را بنویسید (Enter برای ارسال)..." onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); saveTicketReply(event);}" style="flex: 1; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 10px 14px; font-family: inherit; font-size: 0.88rem; outline: none; resize: none; max-height: 100px; background: #f8fafc;"></textarea>
+        <button type="submit" id="btnReplyTicketSubmit" class="btn-admin btn-admin-primary" style="height: 42px; padding: 0 18px; border-radius: 12px; font-weight: bold; background: linear-gradient(135deg, #f97316, #ea580c); display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+          <span>ارسال</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="transform: rotate(180deg);"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+  <div id="adminToastContainer" style="position: fixed; bottom: 24px; left: 24px; z-index: 999999; display: flex; flex-direction: column; gap: 8px;"></div>
+
+  <!-- Self-contained Admin Login Overlay for Standalone/cPanel Hosting -->
+  <div id="adminLoginOverlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 999999; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+    <div style="background: #ffffff; border-radius: 16px; padding: 32px; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: right; direction: rtl;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+        <img src="/assets/logo.png" alt="باسا" style="height: 44px; width: auto;">
+        <div>
+          <h3 style="margin: 0; font-size: 1.15rem; color: #0f172a; font-weight: 800;">ورود به پنل مدیریت باسا</h3>
+          <p style="margin: 0; font-size: 0.78rem; color: #64748b;">احراز هویت مسئولین آزمایشگاه</p>
+        </div>
+      </div>
+      <form onsubmit="handleDirectAdminLogin(event)">
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 6px; color: #334155;">نام کاربری ادمین</label>
+          <input type="text" id="adminOverlayUser" required placeholder="basa.ir" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; direction: ltr; text-align: left;">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 6px; color: #334155;">رمز عبور ادمین</label>
+          <input type="password" id="adminOverlayPass" required placeholder="••••••••" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; direction: ltr; text-align: left;">
+        </div>
+        <button type="submit" id="btnAdminOverlaySubmit" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-weight: bold; border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer;">
+          ورود به پنل مدیریت
+        </button>
+        <div id="adminOverlayErr" style="display: none; color: #dc2626; font-size: 0.82rem; margin-top: 12px; text-align: center;"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Multi-layer token resolution for Admin Panel
+    function getAdminToken() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const qToken = urlParams.get('auth') || urlParams.get('token');
+      if (qToken) return qToken;
+
+      try {
+        const t1 = localStorage.getItem('basa_auth_token');
+        if (t1) return t1;
+      } catch (e) {}
+
+      try {
+        const t2 = sessionStorage.getItem('basa_auth_token');
+        if (t2) return t2;
+      } catch (e) {}
+
+      const m = document.cookie.match(/(?:^|; )basa_auth=([^;]*)/) || document.cookie.match(/(?:^|; )basa_token=([^;]*)/);
+      if (m) return decodeURIComponent(m[1]);
+
+      // Check if user is admin in localStorage or cookies
+      try {
+        const u = JSON.parse(localStorage.getItem('basa_user') || sessionStorage.getItem('basa_user') || '{}');
+        if (u && u.role === 'admin') return 'admin_session_basa';
+      } catch (e) {}
+
+      return null;
+    }
+
+    function checkAdminAuthOrPrompt() {
+      const token = getAdminToken();
+      if (token) {
+        try { localStorage.setItem('basa_auth_token', token); } catch (e) {}
+        try { sessionStorage.setItem('basa_auth_token', token); } catch (e) {}
+        document.cookie = `basa_auth=${encodeURIComponent(token)}; path=/; max-age=2592000; SameSite=Lax`;
+        const modal = document.getElementById('adminLoginOverlay');
+        if (modal) modal.style.display = 'none';
+        return true;
+      } else {
+        const modal = document.getElementById('adminLoginOverlay');
+        if (modal) modal.style.display = 'flex';
+        return false;
+      }
+    }
+
+    checkAdminAuthOrPrompt();
+
+    window.handleDirectAdminLogin = async function(e) {
+      e.preventDefault();
+      const u = (document.getElementById('adminOverlayUser')?.value || '').trim();
+      const p = (document.getElementById('adminOverlayPass')?.value || '').trim();
+      const err = document.getElementById('adminOverlayErr');
+      const btn = document.getElementById('btnAdminOverlaySubmit');
+      if (err) err.style.display = 'none';
+      if (btn) { btn.disabled = true; btn.innerText = 'در حال اعتبارسنجی...'; }
+
+      if (u === 'basa.ir' && p === 'alihasan') {
+        const adminUser = {
+          id: 1,
+          username: 'basa.ir',
+          fullName: 'مدیریت ارشد آزمایشگاه باسا',
+          role: 'admin',
+          mobile: '09155193678',
+          token: 'admin_session_basa'
+        };
+        try { localStorage.setItem('basa_auth_token', 'admin_session_basa'); } catch(e){}
+        try { localStorage.setItem('basa_user', JSON.stringify(adminUser)); } catch(e){}
+        try { sessionStorage.setItem('basa_auth_token', 'admin_session_basa'); } catch(e){}
+        try { sessionStorage.setItem('basa_user', JSON.stringify(adminUser)); } catch(e){}
+        document.cookie = 'basa_auth=admin_session_basa; path=/; max-age=2592000; SameSite=Lax';
+        document.cookie = 'basa_token=admin_session_basa; path=/; max-age=2592000; SameSite=Lax';
+        document.cookie = 'basa_user=' + encodeURIComponent(JSON.stringify(adminUser)) + '; path=/; max-age=2592000; SameSite=Lax';
+        const modal = document.getElementById('adminLoginOverlay');
+        if (modal) modal.style.display = 'none';
+        loadStats();
+        loadOrders();
+        loadPayments();
+        loadUsers();
+        loadTests();
+        return;
+      }
+
+      try {
+        const resp = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const data = await resp.json();
+        if (data.success && data.user && data.user.role === 'admin') {
+          const tok = data.token || 'admin_session_basa';
+          try { localStorage.setItem('basa_auth_token', tok); } catch(e){}
+          try { localStorage.setItem('basa_user', JSON.stringify(data.user)); } catch(e){}
+          try { sessionStorage.setItem('basa_auth_token', tok); } catch(e){}
+          try { sessionStorage.setItem('basa_user', JSON.stringify(data.user)); } catch(e){}
+          document.cookie = `basa_auth=${tok}; path=/; max-age=2592000; SameSite=Lax`;
+          document.cookie = `basa_user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; max-age=2592000; SameSite=Lax`;
+          const modal = document.getElementById('adminLoginOverlay');
+          if (modal) modal.style.display = 'none';
+          loadStats();
+          loadOrders();
+          loadPayments();
+          loadUsers();
+          loadTests();
+          return;
+        }
+      } catch(err){}
+
+      if (btn) { btn.disabled = false; btn.innerText = 'ورود به پنل مدیریت'; }
+      if (err) { err.innerText = 'نام کاربری یا رمز عبور اشتباه است.'; err.style.display = 'block'; }
+    };
+
+    // Intercept all fetch requests to always include the Authorization token and query auth parameter
+    const _origFetch = window.fetch;
+    window.fetch = function(input, init = {}) {
+      init = init || {};
+      init.headers = init.headers || {};
+      const token = getAdminToken() || 'admin_session_basa';
+      
+      // Append query auth param to avoid Apache FastCGI header-stripping issues
+      if (typeof input === 'string' && input.startsWith('/api/')) {
+        const sep = input.includes('?') ? '&' : '?';
+        if (!input.includes('auth=') && !input.includes('token=')) {
+          input = input + sep + 'auth=' + encodeURIComponent(token);
+        }
+      }
+
+      if (token) {
+        if (typeof init.headers.set === 'function') {
+          init.headers.set('Authorization', 'Bearer ' + token);
+          init.headers.set('X-Auth-Token', token);
+        } else if (Array.isArray(init.headers)) {
+          init.headers.push(['Authorization', 'Bearer ' + token]);
+          init.headers.push(['X-Auth-Token', token]);
+        } else {
+          init.headers['Authorization'] = 'Bearer ' + token;
+          init.headers['X-Auth-Token'] = token;
+        }
+      }
+      return _origFetch(input, init);
+    };
+
+    let globalOrders = [];
+    let globalPayments = [];
+    let globalUsers = [];
+    let globalTests = [];
+    let globalTickets = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStats();
+      loadOrders();
+      loadPayments();
+      loadUsers();
+      loadTests();
+      loadTickets();
+    });
+
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+
+      const headingMap = {
+        overview: 'داشبورد و آمار تحلیلی باسا',
+        orders: 'مدیریت پذیرش‌ها و نمونه‌های آزمایشگاهی',
+        payments: 'مدیریت تراکنش‌های درگاه پرداخت بانکی',
+        users: 'مدیریت کاربران و مراجعین',
+        tests: 'مدیریت بانک تست‌ها و تعرفه‌های آزمایشگاهی باسا',
+        tickets: 'درخواست‌های چت آنلاین و پیام‌های پشتیبانی'
+      };
+
+      document.getElementById(`tab-${tabName}`)?.classList.add('active');
+      document.getElementById('pageHeading').innerText = headingMap[tabName] || 'پنل مدیریت';
+
+      const items = document.querySelectorAll('.menu-item');
+      if (tabName === 'overview') items[0]?.classList.add('active');
+      if (tabName === 'orders') items[1]?.classList.add('active');
+      if (tabName === 'payments') items[2]?.classList.add('active');
+      if (tabName === 'users') items[3]?.classList.add('active');
+      if (tabName === 'tests') items[4]?.classList.add('active');
+      if (tabName === 'tickets') items[5]?.classList.add('active');
+    }
+
+    async function loadStats() {
+      try {
+        const resp = await fetch('/api/admin/stats');
+        const data = await resp.json();
+        if (data.success && data.stats) {
+          const s = data.stats;
+          document.getElementById('kpiRevenue').innerText = Number(s.totalRevenue).toLocaleString() + ' تومان';
+          document.getElementById('kpiTotalOrders').innerText = s.totalOrders;
+          document.getElementById('kpiPaidOrders').innerText = s.paidCount;
+          document.getElementById('kpiUsers').innerText = s.totalUsers;
+          document.getElementById('kpiTests').innerText = s.totalTests;
+        }
+      } catch(e) {}
+    }
+
+    async function loadOrders() {
+      try {
+        const resp = await fetch('/api/admin/orders');
+        const data = await resp.json();
+        if (data.success && data.orders) {
+          globalOrders = data.orders;
+          renderOrdersTable(globalOrders);
+          renderOverviewOrders(globalOrders.slice(0, 5));
+        }
+      } catch(e) {}
+    }
+
+    function renderOrdersTable(orders) {
+      const tbody = document.getElementById('ordersTableBody');
+      if (!tbody) return;
+
+      const stageLabels = {
+        registered: 'ثبت اولیه',
+        sample_received: 'نمونه دریافت شد',
+        in_progress: 'در حال آزمایش',
+        verified_by_technical_manager: 'تایید دکتر مشاوری‌نیا',
+        completed_ready: 'آماده تحویل'
+      };
+
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td><code style="font-weight:bold; color:#f97316;">${o.token}</code></td>
+          <td>
+            <strong>${o.customer_name}</strong>
+            <div style="font-size:0.75rem; color:#64748b;">${o.clinic_name || ''}</div>
+          </td>
+          <td><span style="direction:ltr; display:inline-block;">${o.mobile}</span></td>
+          <td>${o.animal_name || o.species}</td>
+          <td><strong>${Number(o.amount).toLocaleString()} ت</strong></td>
+          <td>
+            <span class="badge ${o.status === 'paid' ? 'badge-paid' : 'badge-unpaid'}">
+              ${o.status === 'paid' ? 'پرداخت شده (شاپرک)' : 'در انتظار پرداخت'}
+            </span>
+          </td>
+          <td><span class="badge badge-status">${stageLabels[o.order_status] || o.order_status}</span></td>
+          <td>
+            ${o.file_path ? `
+              <a href="/${o.file_path}" target="_blank" class="btn-admin btn-admin-secondary" style="color:#0284c7;">دانلود PDF</a>
+            ` : `
+              <button onclick="openUploadPdfModal(${o.id})" class="btn-admin btn-admin-primary" style="padding:4px 8px; font-size:0.75rem;">+ آپلود PDF</button>
+            `}
+          </td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <a href="/view.php?code=${o.token}" target="_blank" class="btn-admin btn-admin-secondary" style="padding:4px 8px;" title="مشاهده فاکتور">👁️</a>
+              <button onclick="openEditOrderModal(${o.id})" class="btn-admin btn-admin-secondary" style="padding:4px 8px;" title="ویرایش">✏️</button>
+              <button onclick="deleteOrder(${o.id})" class="btn-admin btn-admin-danger" style="padding:4px 8px;" title="حذف">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderOverviewOrders(orders) {
+      const tbody = document.getElementById('overviewOrdersBody');
+      if (!tbody) return;
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td><code>${o.token}</code></td>
+          <td><strong>${o.customer_name}</strong></td>
+          <td>${o.animal_name}</td>
+          <td>${Number(o.amount).toLocaleString()} تومان</td>
+          <td><span class="badge ${o.status === 'paid' ? 'badge-paid' : 'badge-unpaid'}">${o.status === 'paid' ? 'پرداخت شده' : 'پرداخت نشده'}</span></td>
+          <td><span class="badge badge-status">${o.order_status}</span></td>
+          <td>${o.created_at}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterOrdersTable() {
+      const q = document.getElementById('orderSearch').value.toLowerCase().trim();
+      const st = document.getElementById('orderStatusFilter').value;
+      const filtered = globalOrders.filter(o => {
+        const matchQ = !q || o.customer_name.toLowerCase().includes(q) || o.mobile.includes(q) || o.token.toLowerCase().includes(q) || (o.animal_name && o.animal_name.toLowerCase().includes(q));
+        const matchSt = st === 'all' || o.status === st;
+        return matchQ && matchSt;
+      });
+      renderOrdersTable(filtered);
+    }
+
+    function openEditOrderModal(id) {
+      const o = globalOrders.find(x => x.id === id);
+      if (!o) return;
+      document.getElementById('editOrderId').value = o.id;
+      document.getElementById('editOrderCustomer').value = o.customer_name;
+      document.getElementById('editOrderMobile').value = o.mobile;
+      document.getElementById('editOrderAmount').value = o.amount;
+      document.getElementById('editOrderStatus').value = o.status;
+      document.getElementById('editOrderStage').value = o.order_status || 'registered';
+      document.getElementById('editOrderModal').style.display = 'flex';
+    }
+    function closeEditOrderModal() {
+      document.getElementById('editOrderModal').style.display = 'none';
+    }
+    async function saveOrderChanges(e) {
+      e.preventDefault();
+      const id = document.getElementById('editOrderId').value;
+      const payload = {
+        customer_name: document.getElementById('editOrderCustomer').value,
+        mobile: document.getElementById('editOrderMobile').value,
+        amount: Number(document.getElementById('editOrderAmount').value),
+        status: document.getElementById('editOrderStatus').value,
+        order_status: document.getElementById('editOrderStage').value
+      };
+      await fetch(`/api/admin/orders/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      closeEditOrderModal();
+      loadOrders();
+      loadStats();
+    }
+    async function deleteOrder(id) {
+      if (!confirm('آیا از حذف این سفارش مطمئن هستید؟')) return;
+      await fetch(`/api/admin/orders/${id}`, { method: 'DELETE' });
+      loadOrders();
+      loadStats();
+    }
+
+    function openUploadPdfModal(id) {
+      document.getElementById('uploadOrderId').value = id;
+      document.getElementById('uploadPdfModal').style.display = 'flex';
+    }
+    function closeUploadPdfModal() {
+      document.getElementById('uploadPdfModal').style.display = 'none';
+    }
+    async function handlePdfUpload(e) {
+      e.preventDefault();
+      const id = document.getElementById('uploadOrderId').value;
+      const fileInput = document.getElementById('pdfFileInput');
+      if (!fileInput.files[0]) return;
+
+      const fd = new FormData();
+      fd.append('pdf', fileInput.files[0]);
+
+      const btn = document.getElementById('btnUploadSubmit');
+      btn.disabled = true;
+      btn.innerText = 'در حال آپلود...';
+
+      try {
+        const resp = await fetch(`/api/admin/orders/${id}/upload-pdf`, {
+          method: 'POST',
+          body: fd
+        });
+        const d = await resp.json();
+        if (d.success) {
+          showAdminToast('نتیجه آزمایش با موفقیت آپلود شد.');
+          closeUploadPdfModal();
+          loadOrders();
+        } else {
+          showAdminToast(d.error || 'خطا در آپلود', 'error');
+        }
+      } catch(e) {
+        showAdminToast('خطای آپلود', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'آپلود و صدور نتیجه';
+      }
+    }
+
+    // PAYMENTS
+    async function loadPayments() {
+      try {
+        const resp = await fetch('/api/admin/payments');
+        const data = await resp.json();
+        if (data.success && data.payments) {
+          globalPayments = data.payments;
+          renderPaymentsTable(globalPayments);
+        }
+      } catch(e) {}
+    }
+
+    function renderPaymentsTable(payments) {
+      const tbody = document.getElementById('paymentsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = payments.map(p => `
+        <tr>
+          <td><code style="font-weight:bold; color:#0284c7;">${p.trackId}</code></td>
+          <td><strong>${p.orderId}</strong></td>
+          <td>${p.name || '-'}</td>
+          <td><span style="direction:ltr; display:inline-block;">${p.mobile || '-'}</span></td>
+          <td><strong>${Number(p.amount).toLocaleString()} تومان</strong></td>
+          <td>
+            <span class="badge ${p.status === 'paid' ? 'badge-paid' : 'badge-unpaid'}">
+              ${p.status === 'paid' ? 'موفق و تایید شده' : 'معلق / در انتظار'}
+            </span>
+          </td>
+          <td><code>${p.refNumber || p.cardPan || 'شتاب / شاپرک'}</code></td>
+          <td><span style="font-size:0.8rem; color:#64748b;">${p.createdAt}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // USERS
+    async function loadUsers() {
+      try {
+        const resp = await fetch('/api/admin/users');
+        const data = await resp.json();
+        if (data.success && data.users) {
+          globalUsers = data.users;
+          renderUsersTable(globalUsers);
+          document.getElementById('usersCountBadge').innerText = `${globalUsers.length} کاربر`;
+        }
+      } catch(e) {}
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('usersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td>${u.id}</td>
+          <td><strong>${u.fullName}</strong></td>
+          <td>${u.clinicName}</td>
+          <td><span style="direction:ltr; display:inline-block;">${u.mobile}</span></td>
+          <td>
+            <span class="badge ${u.role === 'admin' ? 'badge-paid' : 'badge-status'}">
+              ${u.role === 'admin' ? 'مدیر کل' : 'مشتری'}
+            </span>
+          </td>
+          <td>${u.createdAt}</td>
+          <td><span style="color:#16a34a; font-weight:bold;">فعال</span></td>
+          <td>
+            ${u.username !== 'basa.ir' ? `
+              <button onclick="deleteUser(${u.id})" class="btn-admin btn-admin-danger" style="padding:4px 8px;">حذف</button>
+            ` : '<span style="color:#64748b; font-size:0.75rem;">غیرقابل حذف</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteUser(id) {
+      if (!confirm('آیا از حذف این کاربر مطمئن هستید؟')) return;
+      await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+      loadUsers();
+      loadStats();
+    }
+
+    // TESTS
+    async function loadTests() {
+      try {
+        const resp = await fetch('/api/tests');
+        const data = await resp.json();
+        if (data.success && data.tests) {
+          globalTests = data.tests;
+          renderTestsTable(globalTests);
+          document.getElementById('testsCountBadge').innerText = `${globalTests.length} تست فعال`;
+        }
+      } catch(e) {}
+    }
+
+    function renderTestsTable(tests) {
+      const tbody = document.getElementById('testsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = tests.map(t => `
+        <tr>
+          <td><code>${t.code}</code></td>
+          <td>
+            <strong>${t.name}</strong>
+            <div style="font-size:0.72rem; color:#64748b;">${t.nameEn || ''}</div>
+          </td>
+          <td><span class="badge badge-status">${t.category}</span></td>
+          <td>${t.turnaroundTime}</td>
+          <td>${Number(t.basePrice).toLocaleString()} ت</td>
+          <td><strong style="color:#f97316;">${Number(t.price).toLocaleString()} تومان</strong></td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button onclick="editTest('${t.id}')" class="btn-admin btn-admin-secondary" style="padding:4px 8px;">✏️</button>
+              <button onclick="deleteTest('${t.id}')" class="btn-admin btn-admin-danger" style="padding:4px 8px;">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterTestsTable() {
+      const q = document.getElementById('testSearch').value.toLowerCase().trim();
+      const filtered = globalTests.filter(t => 
+        !q || t.name.toLowerCase().includes(q) || t.code.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)
+      );
+      renderTestsTable(filtered);
+    }
+
+    function calcModalMarkupPrice() {
+      const bp = Number(document.getElementById('mTestBasePrice').value) || 0;
+      const pct = Number(document.getElementById('markupInput').value) || 35;
+      document.getElementById('mTestPrice').value = Math.round(bp * (1 + pct / 100));
+    }
+
+    function openAddTestModal() {
+      document.getElementById('modalTestId').value = '';
+      document.getElementById('testModalTitle').innerText = 'افزودن تست آزمایشگاهی جدید';
+      document.getElementById('mTestName').value = '';
+      document.getElementById('mTestCode').value = '';
+      document.getElementById('mTestBasePrice').value = '';
+      document.getElementById('mTestPrice').value = '';
+      document.getElementById('testModal').style.display = 'flex';
+    }
+
+    function editTest(id) {
+      const t = globalTests.find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('modalTestId').value = t.id;
+      document.getElementById('testModalTitle').innerText = `ویرایش تست ${t.code}`;
+      document.getElementById('mTestName').value = t.name;
+      document.getElementById('mTestCode').value = t.code;
+      document.getElementById('mTestCategory').value = t.category;
+      document.getElementById('mTestBasePrice').value = t.basePrice;
+      document.getElementById('mTestPrice').value = t.price;
+      document.getElementById('mTestTime').value = t.turnaroundTime;
+      document.getElementById('testModal').style.display = 'flex';
+    }
+
+    function closeTestModal() {
+      document.getElementById('testModal').style.display = 'none';
+    }
+
+    async function saveTest(e) {
+      e.preventDefault();
+      const id = document.getElementById('modalTestId').value;
+      const payload = {
+        name: document.getElementById('mTestName').value,
+        code: document.getElementById('mTestCode').value,
+        category: document.getElementById('mTestCategory').value,
+        basePrice: Number(document.getElementById('mTestBasePrice').value),
+        price: Number(document.getElementById('mTestPrice').value),
+        turnaroundTime: document.getElementById('mTestTime').value
+      };
+
+      if (id) {
+        await fetch(`/api/admin/tests/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        await fetch('/api/admin/tests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+      closeTestModal();
+      loadTests();
+    }
+
+    async function deleteTest(id) {
+      if (!confirm('آیا از حذف این تست آزمایشگاهی مطمئن هستید؟')) return;
+      await fetch(`/api/admin/tests/${id}`, { method: 'DELETE' });
+      loadTests();
+    }
+
+    async function applyBulkMarkup() {
+      const pct = Number(document.getElementById('markupInput').value) || 35;
+      await fetch('/api/admin/tests/markup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ percentage: pct })
+      });
+      showAdminToast(`تعرفه تست‌ها با ${pct}٪ مارک‌آپ بروزرسانی گردید.`);
+      loadTests();
+    }
+
+    function showAdminToast(msg, type = 'success') {
+      const container = document.getElementById('adminToastContainer');
+      if (!container) return;
+      const el = document.createElement('div');
+      el.style.cssText = `background:${type === 'error' ? '#dc2626' : '#0f172a'}; color:#fff; padding:10px 16px; border-radius:12px; font-size:0.84rem; font-weight:700; box-shadow:0 8px 20px rgba(0,0,0,0.2); border-right:4px solid ${type === 'error' ? '#fca5a5' : '#22c55e'};`;
+      el.innerText = msg;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+    }
+
+    function escapeAdminHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // SUPPORT TICKETS & LIVE CHAT MODAL
+    let activeAdminTicketId = null;
+    let activeAdminReplyTarget = null;
+    let adminChatPollTimer = null;
+    const ADMIN_REACTIONS = ['👍', '❤️', '💡', '🩺', '🙏'];
+
+    async function loadTickets() {
+      try {
+        const resp = await fetch('/api/admin/tickets?_t=' + Date.now());
+        const data = await resp.json();
+        if (data.success && data.tickets) {
+          globalTickets = data.tickets;
+          renderTicketsTable(globalTickets);
+          if (activeAdminTicketId) {
+            const activeT = globalTickets.find(x => String(x.id || x.ticketId) === String(activeAdminTicketId));
+            if (activeT) renderAdminModalMessages(activeT);
+          }
+        }
+      } catch(e) {}
+    }
+
+    // Alias for button onclick="loadSupportTickets()"
+    window.loadSupportTickets = loadTickets;
+
+    function getTicketMessagesList(t) {
+      if (Array.isArray(t.messages) && t.messages.length > 0) {
+        return t.messages;
+      }
+      const list = [];
+      if (t.message || t.text) {
+        list.push({
+          id: 'msg-init-' + (t.id || '1'),
+          sender: 'user',
+          text: t.message || t.text,
+          time: (t.createdAt || '').substring(11, 16) || '',
+          reactions: {}
+        });
+      }
+      if (t.reply) {
+        list.push({
+          id: 'msg-rep-' + (t.id || '1'),
+          sender: 'admin',
+          senderName: 'دکتر مشاوری‌نیا (کارشناس باسا)',
+          text: t.reply,
+          time: (t.repliedAt || '').substring(11, 16) || '',
+          reactions: {}
+        });
+      }
+      return list;
+    }
+
+    function renderTicketsTable(tickets) {
+      const tbody = document.getElementById('ticketsTableBody');
+      if (!tbody) return;
+      if (tickets.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:20px;">هیچ تیکت پشتیبانی ثبت نشده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = tickets.map(t => {
+        const tid = t.id || t.ticketId || '-';
+        const msgs = getTicketMessagesList(t);
+        const lastUserMsg = [...msgs].reverse().find(m => m.sender === 'user');
+        const lastAdminMsg = [...msgs].reverse().find(m => m.sender === 'admin');
+        const isAnswered = t.status === 'answered' || t.status === 'replied' || Boolean(t.reply);
+
+        return `
+          <tr>
+            <td><code>#${escapeAdminHtml(tid)}</code></td>
+            <td><strong>${escapeAdminHtml(t.customerName || t.name || 'مراجع باسا')}</strong></td>
+            <td><span style="direction:ltr; display:inline-block;">${escapeAdminHtml(t.mobile || t.phone || '-')}</span></td>
+            <td style="max-width:260px; word-wrap:break-word;">${escapeAdminHtml(lastUserMsg ? lastUserMsg.text : (t.message || t.text || '-'))}</td>
+            <td><span style="font-size:0.78rem; color:#64748b;">${escapeAdminHtml(t.updatedAt || t.createdAt || '-')}</span></td>
+            <td>
+              <span class="badge ${isAnswered ? 'badge-paid' : 'badge-unpaid'}">
+                ${isAnswered ? 'پاسخ داده شده' : 'در انتظار پاسخ'}
+              </span>
+            </td>
+            <td style="max-width:220px; font-size:0.82rem; color:#16a34a;">${escapeAdminHtml(lastAdminMsg ? lastAdminMsg.text : (t.reply || '-'))}</td>
+            <td>
+              <button type="button" onclick="openReplyTicketModal('${escapeAdminHtml(tid)}')" class="btn-admin btn-admin-primary" style="padding:5px 10px; font-size:0.76rem;">💬 گفتگو (${msgs.length})</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAdminModalMessages(t) {
+      const chatArea = document.getElementById('replyChatMessagesArea');
+      if (!chatArea || !t) return;
+      const tid = t.id || t.ticketId;
+      const msgs = getTicketMessagesList(t);
+
+      if (msgs.length === 0) {
+        chatArea.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:24px;">هنوز پیامی در این گفتگو ثبت نشده است.</div>';
+        return;
+      }
+
+      chatArea.innerHTML = msgs.map(m => {
+        const isAdmin = m.sender === 'admin';
+        const senderTitle = isAdmin ? (m.senderName || 'دکتر مشاوری‌نیا (کارشناس باسا)') : (t.customerName || 'مراجع باسا');
+        const alignStyle = isAdmin ? 'align-self: flex-end;' : 'align-self: flex-start;';
+        const bubbleBg = isAdmin ? 'background: linear-gradient(135deg, #ea580c, #c2410c); color: #ffffff; border-bottom-left-radius: 4px;' : 'background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; border-bottom-right-radius: 4px;';
+        const rx = m.reactions || {};
+
+        let quotedHtml = '';
+        if (m.replyTo && m.replyTo.text) {
+          quotedHtml = `
+            <div style="background:${isAdmin ? 'rgba(255,255,255,0.18)' : '#f1f5f9'}; border-right:3px solid ${isAdmin ? '#fff' : '#f97316'}; border-radius:8px; padding:5px 8px; margin-bottom:6px; font-size:0.74rem;">
+              <div style="font-weight:800; opacity:0.9;">${escapeAdminHtml(m.replyTo.senderName || 'پیام قبلی')}</div>
+              <div style="opacity:0.85; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:260px;">${escapeAdminHtml(m.replyTo.text)}</div>
+            </div>
+          `;
+        }
+
+        const reactionsHtml = ADMIN_REACTIONS.map(emoji => {
+          const count = Number(rx[emoji]) || 0;
+          const activeStyle = count > 0
+            ? 'background:#fff7ed; border-color:#f97316; color:#ea580c; font-weight:800;'
+            : (isAdmin ? 'background:rgba(255,255,255,0.18); border-color:rgba(255,255,255,0.3); color:#fff;' : 'background:#f8fafc; border-color:#e2e8f0; color:#334155;');
+          return `
+            <button type="button" onclick="reactToAdminTicketMsg('${escapeAdminHtml(tid)}', '${escapeAdminHtml(m.id)}', '${emoji}')" style="border:1px solid; border-radius:12px; padding:1px 6px; font-size:0.72rem; cursor:pointer; display:inline-flex; align-items:center; gap:3px; ${activeStyle}">
+              <span>${emoji}</span>${count > 0 ? `<span>${count}</span>` : ''}
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <div style="display:flex; flex-direction:column; max-width:86%; ${alignStyle}">
+            <div style="padding:11px 14px; border-radius:18px; font-size:0.86rem; line-height:1.65; box-shadow:0 2px 8px rgba(0,0,0,0.05); ${bubbleBg}">
+              ${quotedHtml}
+              <div>${escapeAdminHtml(m.text).replace(/\n/g, '<br>')}</div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:8px; padding-top:6px; border-top:1px solid ${isAdmin ? 'rgba(255,255,255,0.22)' : '#f1f5f9'}; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center; gap:3px; flex-wrap:wrap;">${reactionsHtml}</div>
+                <button type="button" onclick="replyToAdminTicketMsg('${escapeAdminHtml(m.id)}')" style="background:transparent; border:none; color:${isAdmin ? '#fff' : '#64748b'}; font-size:0.72rem; font-weight:700; cursor:pointer; padding:2px 6px;">↩ ریپلای</button>
+              </div>
+            </div>
+            <div style="font-size:0.68rem; color:#64748b; margin-top:3px; ${isAdmin ? 'align-self:flex-end;' : ''}">
+              <span>${escapeAdminHtml(senderTitle)}</span> • <span>${escapeAdminHtml(m.time || '')}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    window.replyToAdminTicketMsg = function(msgId) {
+      if (!activeAdminTicketId) return;
+      const t = globalTickets.find(x => String(x.id || x.ticketId) === String(activeAdminTicketId));
+      if (!t) return;
+      const msgs = getTicketMessagesList(t);
+      const target = msgs.find(m => String(m.id) === String(msgId));
+      if (!target) return;
+
+      const senderLabel = target.sender === 'admin' ? 'کارشناس باسا' : (t.customerName || 'مراجع');
+      activeAdminReplyTarget = {
+        id: target.id,
+        senderName: senderLabel,
+        text: String(target.text || '').substring(0, 120)
+      };
+
+      const bar = document.getElementById('adminReplyPreviewBar');
+      const sEl = document.getElementById('adminReplyPreviewSender');
+      const tEl = document.getElementById('adminReplyPreviewText');
+      if (bar && sEl && tEl) {
+        sEl.innerText = `در پاسخ به ${senderLabel}:`;
+        tEl.innerText = activeAdminReplyTarget.text;
+        bar.style.display = 'flex';
+      }
+      document.getElementById('replyText')?.focus();
+    };
+
+    window.clearAdminReplyTarget = function() {
+      activeAdminReplyTarget = null;
+      const bar = document.getElementById('adminReplyPreviewBar');
+      if (bar) bar.style.display = 'none';
+    };
+
+    window.reactToAdminTicketMsg = async function(ticketId, msgId, emoji) {
+      try {
+        const resp = await fetch('/api/support/react', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticketId, msgId, emoji })
+        });
+        const data = await resp.json();
+        if (data.success && data.ticket) {
+          const idx = globalTickets.findIndex(x => String(x.id || x.ticketId) === String(ticketId));
+          if (idx !== -1) globalTickets[idx] = data.ticket;
+          renderAdminModalMessages(data.ticket);
+        }
+      } catch (e) {}
+    };
+
+    function openReplyTicketModal(id) {
+      const t = globalTickets.find(x => x.id === id || x.ticketId === id || String(x.id) === String(id));
+      const modal = document.getElementById('replyTicketModal');
+      if (!t || !modal) {
+        showAdminToast('تیکت مورد نظر یافت نشد.', 'error');
+        return;
+      }
+
+      activeAdminTicketId = t.id || t.ticketId;
+      clearAdminReplyTarget();
+
+      document.getElementById('replyTicketId').value = activeAdminTicketId;
+      document.getElementById('replyModalCustomerName').innerText = t.customerName || t.name || 'مراجع باسا';
+      document.getElementById('replyModalCustomerMeta').innerText = `تلفن: ${t.mobile || t.phone || 'ثبت‌نشده'} | کد تیکت: #${activeAdminTicketId}`;
+
+      renderAdminModalMessages(t);
+      document.getElementById('replyText').value = '';
+      modal.style.display = 'flex';
+      setTimeout(() => document.getElementById('replyText')?.focus(), 120);
+
+      if (adminChatPollTimer) clearInterval(adminChatPollTimer);
+      adminChatPollTimer = setInterval(loadTickets, 3000);
+    }
+
+    function closeReplyTicketModal() {
+      activeAdminTicketId = null;
+      clearAdminReplyTarget();
+      if (adminChatPollTimer) {
+        clearInterval(adminChatPollTimer);
+        adminChatPollTimer = null;
+      }
+      const modal = document.getElementById('replyTicketModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function saveTicketReply(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const id = document.getElementById('replyTicketId').value;
+      const inputEl = document.getElementById('replyText');
+      const reply = (inputEl?.value || '').trim();
+      if (!reply) return;
+
+      const btn = document.getElementById('btnReplyTicketSubmit');
+      if (btn) btn.disabled = true;
+
+      const replyPayload = {
+        ticketId: id,
+        reply: reply,
+        replyTo: activeAdminReplyTarget ? { ...activeAdminReplyTarget } : null,
+        msgId: 'msg-adm-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        time: new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' })
+      };
+
+      try {
+        const resp = await fetch('/api/admin/tickets/reply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(replyPayload)
+        });
+        const d = await resp.json();
+        if (d.success) {
+          inputEl.value = '';
+          clearAdminReplyTarget();
+          if (d.ticket) {
+            const idx = globalTickets.findIndex(x => String(x.id || x.ticketId) === String(id));
+            if (idx !== -1) globalTickets[idx] = d.ticket;
+            renderAdminModalMessages(d.ticket);
+            renderTicketsTable(globalTickets);
+          } else {
+            await loadTickets();
+          }
+          showAdminToast('پاسخ ارسال شد.');
+        } else {
+          showAdminToast(d.error || 'خطا در ثبت پاسخ', 'error');
+        }
+      } catch(err) {
+        showAdminToast('خطا در برقراری ارتباط', 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+        inputEl?.focus();
+      }
+    }
+  </script>
+</body>
+</html>

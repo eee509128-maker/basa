@@ -1,0 +1,48 @@
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/" class="nav-brand" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+      <img src="/assets/logo.png" alt="آزمایشگاه تخصصی دامپزشکی باسا" style="height: 48px; width: auto; object-fit: contain;">
+      <div>
+        <span style="font-weight: 800; font-size: 1.15rem; letter-spacing: -0.5px; color: #1e293b;">آزمایشگاه باسا</span>
+        <span style="display: block; font-size: 0.65rem; color: #64748b; font-weight: normal; margin-top: -2px;">مرجع تخصصی تشخیص‌های دامپزشکی</span>
+      </div>
+    </a>
+    
+    <div class="nav-links">
+      <a href="/#hero" class="nav-link">خانه</a>
+      <a href="/#services" class="nav-link">بخش‌های تخصصی</a>
+      <a href="/#species" class="nav-link">خدمات به تفکیک میزبان</a>
+      <a href="/#features" class="nav-link">چرا باسا؟</a>
+      <a href="/#contact" class="nav-link">تماس با ما</a>
+    </div>
+
+    <div class="nav-actions" style="display: flex; align-items: center; gap: 10px;">
+      <!-- Auth Status / Login Button -->
+      <div id="navAuthContainer">
+        <script>
+          (function(){
+            try {
+              var user = window.currentUser || (window.getUserSession && window.getUserSession()) || (window.__getStoredUser && window.__getStoredUser());
+              if (!user) {
+                var u1 = localStorage.getItem('basa_user');
+                if (u1) user = JSON.parse(u1);
+              }
+              if (user && (user.fullName || user.username || user.mobile)) {
+                var name = user.fullName || user.username || user.mobile;
+                var isAdmin = user.role === 'admin';
+                document.write('<div style="position:relative;display:inline-block;"><button onclick="window.toggleUserMenu()" class="user-dropdown-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>' + name + '</span>' + (isAdmin ? ' <span style="background:#ea580c;color:#fff;font-size:0.65rem;padding:1px 6px;border-radius:10px;">مدیر</span>' : '') + '</button><div id="userDropdownMenu" style="display:none;position:absolute;left:0;top:110%;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:190px;padding:6px;z-index:1000;text-align:right;">' + (isAdmin ? '<a href="/admin.html" style="display:block;padding:8px 12px;font-size:0.85rem;color:#f97316;font-weight:bold;border-radius:6px;text-decoration:none;">📊 پنل مدیریت باسا</a>' : '') + '<button onclick="window.logoutUser()" style="width:100%;text-align:right;padding:8px 12px;font-size:0.85rem;color:#dc2626;background:none;border:none;border-radius:6px;cursor:pointer;font-family:inherit;">خروج از حساب</button></div></div>');
+                return;
+              }
+            } catch(e) {}
+            document.write('<button onclick="window.openAuthModal(\'login\')" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span id="navAuthLabel">ورود / ثبت‌نام</span></button>');
+          })();
+        </script>
+      </div>
+
+      <!-- Sample Admission Modal Trigger -->
+      <button onclick="window.openAdmissionModal()" class="btn btn-primary btn-shine" style="padding: 9px 20px; font-size: 0.88rem;">
+        پذیرش نمونه
+      </button>
+    </div>
+  </div>
+</nav>

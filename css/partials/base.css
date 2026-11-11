@@ -1,0 +1,153 @@
+@font-face {
+  font-family: 'Peyda';
+  src: url('../../fonts/PeydaWeb-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('../../fonts/PeydaWeb-Regular.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #fdf8f5;
+  --bg-surface: #ffffff;
+  --bg-hover: #fff7ed;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --accent-primary: #f97316;
+  --accent-gradient: linear-gradient(135deg, #f97316, #fb923c);
+  --danger: #f43f5e;
+  --success: #10b981;
+  --border-light: rgba(249, 115, 22, 0.18);
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-card: 0 10px 30px -5px rgba(249, 115, 22, 0.08);
+  --shadow-glow: 0 4px 20px rgba(249, 115, 22, 0.3);
+  --font-family: 'Peyda', system-ui, -apple-system, sans-serif;
+  --header-height: 72px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  width: 100%;
+  direction: rtl;
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  line-height: 1.7;
+  position: relative;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.text-gradient {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* افکت‌های ملایم پس‌زمینه برای حالت روشن */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.15;
+  animation: ambientPulse 10s ease-in-out infinite alternate;
+}
+
+.glow-1 {
+  width: min(500px, 80vw);
+  height: min(500px, 80vw);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.4) 0%, rgba(249, 115, 22, 0) 70%);
+  top: -100px;
+  right: -100px;
+}
+
+.glow-2 {
+  width: min(600px, 90vw);
+  height: min(600px, 90vw);
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.3) 0%, rgba(251, 146, 60, 0) 70%);
+  bottom: 5%;
+  left: -150px;
+  animation-duration: 14s;
+}
+
+.glow-3 {
+  width: min(400px, 70vw);
+  height: min(400px, 70vw);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, rgba(251, 146, 60, 0) 70%);
+  top: 50%;
+  right: 15%;
+  animation-duration: 12s;
+}
+
+@keyframes ambientPulse {
+  0% { transform: scale(1) translate(0, 0); opacity: 0.12; }
+  50% { transform: scale(1.15) translate(25px, -20px); opacity: 0.22; }
+  100% { transform: scale(0.92) translate(-20px, 25px); opacity: 0.12; }
+}
+
+@keyframes softPulse {
+  0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(249, 115, 22, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+
+/* پنل‌های شیشه‌ای و کارت‌ها برای تم روشن */
+.glass-panel {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 15px 35px -5px rgba(249, 115, 22, 0.15);
+  transform: translateY(-4px);
+}

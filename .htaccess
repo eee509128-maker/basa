@@ -1,0 +1,33 @@
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Pass Authorization header to PHP in Apache / FastCGI / PHP-FPM
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Route API requests to api.php
+RewriteRule ^api/(.*)$ api.php?route=$1 [QSA,L]
+RewriteRule ^api$ api.php [QSA,L]
+
+# Existing files or directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Fallback to index.html for frontend routing
+RewriteRule ^(.*)$ index.html [L]
+</IfModule>
+
+AddDefaultCharset UTF-8
+
+<IfModule mod_headers.c>
+    # Prevent browser caching of JS/CSS during updates
+    <FilesMatch "\.(js|css|php|html)$">
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+    </FilesMatch>
+</IfModule>

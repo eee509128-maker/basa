@@ -1,0 +1,690 @@
+/* Basa Laboratory - Ultra-Modern Interactive Live Support Chat Widget */
+
+#basa-chat-widget-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 99990;
+  font-family: 'Vazir', -apple-system, BlinkMacSystemFont, Tahoma, sans-serif;
+  direction: rtl;
+}
+
+.basa-chat-trigger-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Floating Trigger Button with 3D Magnetic Hover & Orbital Ring */
+.basa-chat-trigger-btn {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #fb923c 0%, #f97316 45%, #c2410c 100%);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 12px 30px rgba(234, 88, 12, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  outline: none;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.basa-chat-trigger-icon-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.basa-chat-trigger-btn:hover {
+  box-shadow: 0 18px 38px rgba(249, 115, 22, 0.65), 0 0 24px rgba(251, 146, 60, 0.5);
+}
+
+.basa-chat-trigger-btn:active {
+  transform: scale(0.94) !important;
+}
+
+/* Rotating Orbital Ring */
+.basa-chat-trigger-orbit {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(249, 115, 22, 0.55);
+  animation: basaOrbitSpin 10s linear infinite;
+  pointer-events: none;
+}
+
+.basa-chat-trigger-btn:hover .basa-chat-trigger-orbit {
+  border-color: rgba(249, 115, 22, 0.9);
+  animation-duration: 4s;
+}
+
+@keyframes basaOrbitSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Glowing Pulsing Aura Ring */
+.basa-chat-trigger-aura {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.42) 0%, rgba(249, 115, 22, 0) 70%);
+  animation: basaPulseAura 2.4s infinite ease-out;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes basaPulseAura {
+  0% { transform: scale(0.88); opacity: 0.95; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Floating Tooltip Pill Next to Trigger */
+.basa-chat-trigger-tooltip {
+  position: absolute;
+  left: 78px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.22);
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.basa-chat-trigger-wrap:hover .basa-chat-trigger-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Unread Badge */
+.basa-chat-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  animation: basaBounceBadge 1s infinite alternate;
+}
+
+@keyframes basaBounceBadge {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+/* Main Chat Window Box */
+.basa-chat-window {
+  position: fixed;
+  bottom: 102px;
+  left: 24px;
+  width: 390px;
+  max-width: calc(100vw - 32px);
+  height: 590px;
+  max-height: calc(100vh - 125px);
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.24), 0 0 0 1px rgba(226, 232, 240, 0.85);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(25px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 99995;
+}
+
+.basa-chat-window.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Header Area */
+.basa-chat-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  gap: 8px;
+}
+
+.basa-chat-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.basa-chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.basa-chat-header-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.basa-chat-header-info h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.basa-chat-header-status {
+  font-size: 0.72rem;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.basa-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  flex-shrink: 0;
+}
+
+.basa-chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.basa-header-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.basa-header-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Sub-Bar for Support Mode Switch */
+.basa-chat-subbar {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  gap: 6px;
+}
+
+.basa-mode-badge {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.basa-mode-badge.human {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.basa-switch-human-btn {
+  background: #f97316;
+  color: #ffffff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.basa-switch-human-btn:hover {
+  background: #ea580c;
+}
+
+/* Chat Messages Scroll Container */
+.basa-chat-messages {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f8fafc;
+  scroll-behavior: smooth;
+}
+
+/* Chat Message Bubbles */
+.basa-msg-row {
+  display: flex;
+  flex-direction: column;
+  max-width: 88%;
+  animation: basaFadeMsg 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes basaFadeMsg {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.basa-msg-row.bot {
+  align-self: flex-start;
+}
+
+.basa-msg-row.user {
+  align-self: flex-end;
+}
+
+.basa-msg-bubble {
+  padding: 11px 14px;
+  border-radius: 18px;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  position: relative;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.basa-msg-row.bot .basa-msg-bubble {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-bottom-right-radius: 4px;
+}
+
+.basa-msg-row.bot.admin-msg .basa-msg-bubble {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  color: #064e3b;
+}
+
+.basa-admin-badge-head {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #15803d;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed #bbf7d0;
+}
+
+.basa-msg-row.user .basa-msg-bubble {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: #ffffff;
+  border-bottom-left-radius: 4px;
+}
+
+/* Quoted Reply Box Inside Bubble */
+.basa-msg-quoted {
+  background: rgba(15, 23, 42, 0.06);
+  border-right: 3px solid #f97316;
+  border-radius: 8px;
+  padding: 5px 8px;
+  margin-bottom: 7px;
+  font-size: 0.75rem;
+}
+
+.basa-msg-row.user .basa-msg-quoted {
+  background: rgba(255, 255, 255, 0.18);
+  border-right-color: #ffffff;
+  color: #ffffff;
+}
+
+.basa-msg-quoted-sender {
+  font-weight: 800;
+  margin-bottom: 2px;
+  opacity: 0.9;
+}
+
+.basa-msg-quoted-text {
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+/* Footer Tools: Reactions + Reply Button */
+.basa-msg-footer-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  flex-wrap: wrap;
+}
+
+.basa-msg-row.user .basa-msg-footer-tools {
+  border-top-color: rgba(255, 255, 255, 0.22);
+}
+
+.basa-msg-reply-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.basa-msg-reply-btn:hover {
+  background: rgba(249, 115, 22, 0.12);
+  color: #ea580c;
+}
+
+.basa-msg-row.user .basa-msg-reply-btn {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.basa-msg-row.user .basa-msg-reply-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.basa-msg-time {
+  font-size: 0.68rem;
+  color: #64748b;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.basa-msg-row.user .basa-msg-time {
+  align-self: flex-end;
+}
+
+/* Emoji Reaction Bar */
+.basa-reactions-bar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.basa-reaction-pill {
+  background: rgba(241, 245, 249, 0.9);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  user-select: none;
+  font-family: inherit;
+  color: #334155;
+}
+
+.basa-msg-row.user .basa-reaction-pill {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.basa-reaction-pill:hover {
+  transform: scale(1.14);
+  border-color: #f97316;
+}
+
+.basa-reaction-pill.active {
+  background: #fff7ed;
+  border-color: #f97316;
+  color: #ea580c;
+  font-weight: 800;
+}
+
+.rx-count {
+  font-size: 0.68rem;
+}
+
+/* Reply Preview Banner Above Input */
+.basa-reply-preview-bar {
+  background: #fff7ed;
+  border-top: 1px solid #fed7aa;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.basa-reply-preview-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  border-right: 3px solid #f97316;
+  padding-right: 8px;
+}
+
+.basa-reply-preview-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ea580c;
+}
+
+.basa-reply-preview-text {
+  font-size: 0.74rem;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.basa-reply-cancel-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px 6px;
+}
+
+/* Quick Suggestion Pills (Draggable) */
+.basa-chat-suggestions {
+  padding: 8px 12px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.basa-chat-suggestions.dragging {
+  cursor: grabbing;
+}
+
+.basa-chat-suggestions::-webkit-scrollbar {
+  display: none;
+}
+
+.basa-sug-pill {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.basa-sug-pill:hover {
+  background: #f97316;
+  color: #ffffff;
+  border-color: #f97316;
+}
+
+/* Input Area */
+.basa-chat-input-area {
+  padding: 10px 12px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.basa-chat-input {
+  flex: 1;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 0.86rem;
+  font-family: inherit;
+  direction: rtl;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #f8fafc;
+}
+
+.basa-chat-input:focus {
+  border-color: #f97316;
+  background: #ffffff;
+}
+
+.basa-chat-send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.basa-chat-send-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+}
+
+/* Typing Dots Animation */
+.basa-typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  border-bottom-right-radius: 4px;
+  align-self: flex-start;
+}
+
+.basa-typing-dot {
+  width: 7px;
+  height: 7px;
+  background: #f97316;
+  border-radius: 50%;
+  animation: basaTypingBounce 1.4s infinite ease-in-out both;
+}
+
+.basa-typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.basa-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes basaTypingBounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  #basa-chat-widget-container {
+    bottom: 16px;
+    left: 16px;
+  }
+  .basa-chat-window {
+    bottom: 90px;
+    left: 16px;
+    width: calc(100vw - 32px);
+    height: 75vh;
+  }
+  .basa-chat-trigger-tooltip {
+    display: none;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "آزمایشگاه تخصصی دامپزشکی باسا",
+  "description": "مرجع تشخیص‌های دقیق دامپزشکی، مولکولی، PCR و انگل‌شناسی در مشهد مجهز به تریاژ هوشمند",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

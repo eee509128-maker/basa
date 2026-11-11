@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>آزمایشگاه تخصصی دامپزشکی باسا | مرجع تشخیص‌های دقیق دامپزشکی</title>
+  <meta name="description" content="مرجع تشخیص‌های دقیق دامپزشکی، مولکولی، PCR و انگل‌شناسی در مشهد">
+  <meta property="og:title" content="آزمایشگاه تخصصی دامپزشکی باسا">
+  <meta property="og:description" content="مرجع تشخیص‌های دقیق دامپزشکی، مولکولی، PCR و انگل‌شناسی در مشهد">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  
+  <link rel="stylesheet" href="/css/partials/base.css?v=2.1">
+  <link rel="stylesheet" href="/css/partials/layout.css?v=2.1">
+  <link rel="stylesheet" href="/css/partials/components.css?v=2.1">
+  <link rel="stylesheet" href="/css/partials/sections.css?v=2.1">
+  <link rel="stylesheet" href="/css/admission.css?v=2.2">
+  <link rel="stylesheet" href="/css/chat_widget.css?v=1.0">
+  <script>
+    (function(){
+      function getStoredUser() {
+        try {
+          if (window.__PRELOADED_USER__) return window.__PRELOADED_USER__;
+          var u1 = localStorage.getItem('basa_user');
+          if (u1) { var p1 = JSON.parse(u1); if (p1 && (p1.fullName || p1.username)) return p1; }
+        } catch(e) {}
+        try {
+          var u2 = sessionStorage.getItem('basa_user');
+          if (u2) { var p2 = JSON.parse(u2); if (p2 && (p2.fullName || p2.username)) return p2; }
+        } catch(e) {}
+        try {
+          var m = document.cookie.match(/(?:^|; )basa_user=([^;]*)/);
+          if (m) { var p3 = JSON.parse(decodeURIComponent(m[1])); if (p3 && (p3.fullName || p3.username)) return p3; }
+        } catch(e) {}
+        return null;
+      }
+      window.__getStoredUser = getStoredUser;
+      window.currentUser = getStoredUser();
+    })();
+  </script>
+</head>
+<body>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <div id="landing-wrapper">
+    <header>
+      <nav class="navbar">
+        <div class="container nav-container">
+          <a href="/" class="nav-brand" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+            <img src="/assets/logo.png" alt="آزمایشگاه تخصصی دامپزشکی باسا" style="height: 48px; width: auto; object-fit: contain;">
+            <div>
+              <span style="font-weight: 800; font-size: 1.15rem; letter-spacing: -0.5px; color: #1e293b;">آزمایشگاه باسا</span>
+              <span style="display: block; font-size: 0.65rem; color: #64748b; font-weight: normal; margin-top: -2px;">مرجع تخصصی تشخیص‌های دامپزشکی</span>
+            </div>
+          </a>
+          
+          <div class="nav-links">
+            <a href="/#hero" class="nav-link">خانه</a>
+            <a href="/#services" class="nav-link">بخش‌های تخصصی</a>
+            <a href="/#species" class="nav-link">خدمات به تفکیک میزبان</a>
+            <a href="/#features" class="nav-link">چرا باسا؟</a>
+            <a href="/#contact" class="nav-link">تماس با ما</a>
+          </div>
+
+          <div class="nav-actions" style="display: flex; align-items: center; gap: 10px;">
+            <div id="navAuthContainer">
+              <script>
+                (function(){
+                  try {
+                    var user = window.currentUser || (window.__getStoredUser && window.__getStoredUser());
+                    if (user && (user.fullName || user.username || user.mobile)) {
+                      var name = user.fullName || user.username || user.mobile;
+                      var isAdmin = user.role === 'admin';
+                      document.write('<div style="position:relative;display:inline-block;"><button onclick="window.toggleUserMenu()" class="user-dropdown-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>' + name + '</span>' + (isAdmin ? ' <span style="background:#ea580c;color:#fff;font-size:0.65rem;padding:1px 6px;border-radius:10px;">مدیر</span>' : '') + '</button><div id="userDropdownMenu" style="display:none;position:absolute;left:0;top:110%;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:190px;padding:6px;z-index:1000;text-align:right;">' + (isAdmin ? '<a href="/admin.html" style="display:block;padding:8px 12px;font-size:0.85rem;color:#f97316;font-weight:bold;border-radius:6px;text-decoration:none;">📊 پنل مدیریت باسا</a>' : '') + '<button onclick="window.logoutUser()" style="width:100%;text-align:right;padding:8px 12px;font-size:0.85rem;color:#dc2626;background:none;border:none;border-radius:6px;cursor:pointer;font-family:inherit;">خروج از حساب</button></div></div>');
+                      return;
+                    }
+                  } catch(e) {}
+                  document.write('<button onclick="window.openAuthModal(\'login\')" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span id="navAuthLabel">ورود / ثبت‌نام</span></button>');
+                })();
+              </script>
+            </div>
+
+            <button onclick="window.openAdmissionModal()" class="btn btn-primary btn-shine" style="padding: 9px 20px; font-size: 0.88rem;">
+              پذیرش نمونه
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+    <main>
+      <section id="hero" data-include="components/hero.html"></section>
+      <section id="services" data-include="components/services.html"></section>
+      <section id="species" data-include="components/species-services.html"></section>
+      <section id="features" data-include="components/why-basa.html"></section>
+      <section id="contact" data-include="components/contact.html"></section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <div class="nav-brand" style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
+              <img src="/assets/logo.png" alt="آزمایشگاه تخصصی دامپزشکی باسا" style="height: 52px; width: auto; object-fit: contain;">
+              <span style="font-weight: 800; font-size: 1.2rem;">آزمایشگاه باسا</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.85; max-width: 360px;">
+              آزمایشگاه تخصصی دامپزشکی باسا با بهره‌گیری از تجهیزات پیشرفته، نیروهای متخصص و دانشگاهی، خدمات تشخیصی دقیق و قابل اعتماد را در اختیار دامپزشکان و مراجعین محترم قرار می‌دهد.
+            </p>
+            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+              <span style="font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; background: rgba(249, 115, 22, 0.1); color: var(--accent-primary); border: 1px solid rgba(249, 115, 22, 0.2); font-weight: 600;">
+                مسئول فنی: دکتر علی مشاوری نیا
+              </span>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">دسترسی سریع</h4>
+            <ul class="footer-links-list">
+              <li><a href="#hero" class="footer-link-item">صفحه اصلی</a></li>
+              <li><a href="#services" class="footer-link-item">بخش‌های تخصصی</a></li>
+              <li><a href="#species" class="footer-link-item">خدمات تفکیک میزبان</a></li>
+              <li><a href="#features" class="footer-link-item">چرا آزمایشگاه باسا؟</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">بخش‌های تشخیصی</h4>
+            <ul class="footer-links-list">
+              <li><a href="#services" class="footer-link-item">تشخیص مولکولی (PCR)</a></li>
+              <li><a href="#services" class="footer-link-item">میکروب‌شناسی و آنتی‌بیوگرام</a></li>
+              <li><a href="#services" class="footer-link-item">انگل‌شناسی تخصصی</a></li>
+              <li><a href="#services" class="footer-link-item">سرولوژی و پاتولوژی</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">ارتباط و نماد اعتماد</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.7;">
+              مشهد، بلوار اندیشه، اندیشه ۹، پلاک ۵۴<br>
+              تلفن: ۰۹۱۵۵۱۹۳۶۷۸
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+              <a href="tel:09155193678" class="btn btn-primary btn-shine" style="padding: 10px 18px; font-size: 0.88rem;">
+                <span>تماس با آزمایشگاه</span>
+              </a>
+            </div>
+            <!-- نماد اعتماد الکترونیکی (اینماد) -->
+            <div class="enamad-trust-badge" style="margin-top: 14px; background: #ffffff; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 12px 16px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.08); width: fit-content;">
+              <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=720907&Code=dMdARPyCC1Lp9OsdhAqUBBNVQWD5EZfL'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=720907&Code=dMdARPyCC1Lp9OsdhAqUBBNVQWD5EZfL' alt='نماد اعتماد الکترونیکی آزمایشگاه باسا' style='cursor:pointer; max-width: 125px; height: auto;' code='dMdARPyCC1Lp9OsdhAqUBBNVQWD5EZfL'></a>
+              <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; margin-top: 6px; text-align: center;">نماد اعتماد الکترونیکی (اینماد)</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom-bar">
+          <span>&copy; تمامی حقوق مادی و معنوی سامانه متعلق به «آزمایشگاه تخصصی دامپزشکی باسا» می‌باشد.</span>
+          <span>سلامت حیوانات، امنیت آینده | دارای درگاه پرداخت امن بانکی</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Dynamic Modals -->
+  <div data-include="components/admission-modal.html"></div>
+  <div data-include="components/auth-modal.html"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="/js/landing.js?v=4.0"></script>
+  <script src="/js/admission.js?v=4.0"></script>
+  <script src="/js/chat_widget.js?v=4.0"></script>
+</body>
+</html>
